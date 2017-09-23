@@ -4,3 +4,10 @@ bin/
 lib/
 py/bin
 *.so
+.git/
+.vs/
+**/Debug lib/
+**/Release Lib/
+**/Debug/
+**/Release/
+**/x64/
