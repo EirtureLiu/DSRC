@@ -165,15 +165,15 @@ private:
 	{
 		switch (order_)
 		{
-			case 1:	return new TQualityLossyOrderPositionalModeler<8, 1>();
-			case 2:	return new TQualityLossyOrderPositionalModeler<8, 2>();
-			case 3:	return new TQualityLossyOrderPositionalModeler<8, 3>();
-			case 4:	return new TQualityLossyOrderPositionalModeler<8, 4>();
-			case 5:	return new TQualityLossyOrderPositionalModeler<8, 5>();
-			case 6:	return new TQualityLossyOrderPositionalModeler<8, 6>();
-			case 7:	return new TQualityLossyOrderPositionalModeler<8, 7>();
-			case 8:	return new TQualityLossyOrderPositionalModeler<8, 8>();
-			case 9:	return new TQualityLossyOrderPositionalModeler<8, 9>();
+			case 1:	return new TQualityLossyOrderPositionalModeler<7, 1>();
+			case 2:	return new TQualityLossyOrderPositionalModeler<7, 2>();
+			case 3:	return new TQualityLossyOrderPositionalModeler<7, 3>();
+			case 4:	return new TQualityLossyOrderPositionalModeler<7, 4>();
+			case 5:	return new TQualityLossyOrderPositionalModeler<7, 5>();
+			case 6:	return new TQualityLossyOrderPositionalModeler<7, 6>();
+			case 7:	return new TQualityLossyOrderPositionalModeler<7, 7>();
+			case 8:	return new TQualityLossyOrderPositionalModeler<7, 8>();
+			case 9:	return new TQualityLossyOrderPositionalModeler<7, 9>();
 		}
 
 		return NULL;
