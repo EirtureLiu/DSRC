@@ -3,15 +3,19 @@
 //
 
 #include "com_genedock_sdk_internal_compress_DSRCImpl.h"
-#include <Dsrc.h>
+#include <Dsrc.h>  
+#include <Windows.h>  
+
+char* jstringToWindows(JNIEnv *env, jstring jstr);
+jstring WindowsTojstring(JNIEnv* env, const char* str);
 
 
 JNIEXPORT jint JNICALL Java_com_genedock_sdk_internal_compress_DSRCImpl_decompress
         (JNIEnv *env, jobject obj, jstring inputFile, jstring outputFile, jint t) {
     using namespace dsrc::lib;
 
-    const char *inFilename_ = env->GetStringUTFChars(inputFile, 0);
-    const char *outFilename_ = env->GetStringUTFChars(outputFile, 0);
+    const char *inFilename_ = jstringToWindows(env, inputFile);
+    const char *outFilename_ = jstringToWindows(env, outputFile);
 
     try {
         DsrcModule dsrc;
@@ -40,8 +44,8 @@ JNIEXPORT jint JNICALL Java_com_genedock_sdk_internal_compress_DSRCImpl_compress
     using namespace dsrc::lib;
 
 
-    const char *inFilename_ = env->GetStringUTFChars(inputFile, 0);
-    const char *outFilename_ = env->GetStringUTFChars(outputFile, 0);
+    const char *inFilename_ = jstringToWindows(env, inputFile);
+    const char *outFilename_ = jstringToWindows(env, outputFile);
 
     // Configure DSRC compressor
     try {
@@ -84,3 +88,36 @@ JNIEXPORT jint JNICALL Java_com_genedock_sdk_internal_compress_DSRCImpl_compress
     return 0;
 }
 
+char* jstringToWindows(JNIEnv *env, jstring jstr)
+{ //UTF8/16 to gb2312  
+	int length = (env)->GetStringLength(jstr);
+	const jchar* jcstr = (env)->GetStringChars(jstr, 0);
+	char* rtn = (char*)malloc(length * 2 + 1);
+	int size = 0;
+	size = WideCharToMultiByte(CP_ACP, 0, (LPCWSTR)jcstr, length, rtn, (length * 2 + 1), NULL, NULL);
+	if (size <= 0)
+		return NULL;
+	(env)->ReleaseStringChars(jstr, jcstr);
+	rtn[size] = 0;
+	return rtn;
+}
+
+jstring WindowsTojstring(JNIEnv* env, const char* str)
+{//gb2312 to utf8/16  
+	jstring rtn = 0;
+	int slen = strlen(str);
+	unsigned short * buffer = 0;
+	if (slen == 0)
+		rtn = (env)->NewStringUTF(str);
+	else
+	{
+		int length = MultiByteToWideChar(CP_ACP, 0, (LPCSTR)str, slen, NULL, 0);
+		buffer = (unsigned short *)malloc(length * 2 + 1);
+		if (MultiByteToWideChar(CP_ACP, 0, (LPCSTR)str, slen, (LPWSTR)buffer, length) >0)
+			rtn = (env)->NewString((jchar*)buffer, length);
+	}
+	if (buffer)
+		free(buffer);
+
+	return rtn;
+}
